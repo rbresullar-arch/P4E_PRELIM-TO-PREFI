@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Physics for Engineers · Quiz Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --bg-2: #131826;
+  --bg-3: #1a2030;
+  --grid: rgba(255, 140, 66, 0.06);
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --text: #e8eaf0;
+  --dim: #8a92a8;
+  --dimmer: #5a627a;
+  --accent: #ff8c42;
+  --good: #4ade80;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  padding: clamp(16px, 4vw, 32px);
+}
+
+.container {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+/* ========== BLOCK ========== */
+.block-screen {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center; padding: 20px;
+}
+.block-screen h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(28px, 7vw, 48px);
+  color: var(--accent); margin-bottom: 16px;
+}
+.block-screen p {
+  font-size: clamp(14px, 4vw, 18px);
+  color: var(--dim); max-width: 480px; line-height: 1.6;
+}
+
+/* ========== HEADER ========== */
+.hub-header {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.hub-header h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(32px, 8vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.hub-header .sub {
+  color: var(--dim);
+  font-size: clamp(13px, 3.6vw, 15px);
+  letter-spacing: 0.02em;
+}
+
+/* ========== NAME ========== */
+.name-block {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: clamp(16px, 4vw, 24px);
+  margin-bottom: 32px;
+}
+.name-block .lab {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.name-block .name-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.name-block input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  padding: 12px 14px;
+  min-height: 48px;
+  outline: none;
+  -webkit-appearance: none;
+}
+.name-block input:focus { border-color: var(--accent); }
+.name-block .save-btn {
+  background: var(--accent);
+  color: #0a0e1a;
+  border: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  padding: 0 18px;
+  border-radius: 4px;
+  min-height: 48px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.name-block .save-btn:active { transform: scale(0.97); }
+.name-block .saved-hint {
+  font-size: 11px;
+  color: var(--good);
+  margin-top: 6px;
+  height: 14px;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.name-block .saved-hint.show { opacity: 1; }
+
+/* ========== PERIOD SECTIONS ========== */
+.period {
+  margin-bottom: 32px;
+}
+.period-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.period-head .label {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(20px, 5vw, 26px);
+}
+.period-head .meta {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+.period-head .line {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.topics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+@media (min-width: 600px) {
+  .topics-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.topic-card {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  min-height: 76px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.topic-card:hover { border-color: var(--accent); background: var(--bg-3); }
+.topic-card:active { transform: scale(0.99); }
+.topic-card.done { border-color: rgba(74, 222, 128, 0.3); }
+.topic-card .left { min-width: 0; flex: 1; }
+.topic-card .name {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topic-card .status {
+  font-size: 11px;
+  color: var(--dimmer);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.topic-card .status.done { color: var(--good); }
+.topic-card .right {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--dim);
+  white-space: nowrap;
+}
+.topic-card.done .right { color: var(--text); }
+.topic-card .right .total { color: var(--dimmer); font-size: 16px; }
+
+/* ========== SUMMARY BAR ========== */
+.summary-bar {
+  position: sticky;
+  bottom: 12px;
+  margin-top: 32px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+.summary-bar .info { flex: 1; min-width: 0; }
+.summary-bar .info .k {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.summary-bar .info .v {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+.summary-bar button {
+  background: var(--accent);
+  color: #0a0e1a;
+  border: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  padding: 12px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.summary-bar button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.summary-bar button:active:not(:disabled) { transform: scale(0.97); }
+
+/* ========== MODAL FOR CERTIFICATE ========== */
+.modal {
+  position: fixed; inset: 0;
+  background: rgba(5, 8, 16, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+.modal.show { display: flex; }
+.modal-inner {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  max-width: 540px;
+  width: 100%;
+  padding: 24px;
+}
+.modal-inner h2 {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+.modal-inner p {
+  font-size: 13px;
+  color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+.modal-inner .preview {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  margin-bottom: 18px;
+  display: block;
+}
+.modal-inner .row {
+  display: flex; gap: 8px;
+}
+.modal-inner button {
+  flex: 1;
+  background: var(--accent);
+  color: #0a0e1a;
+  border: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  padding: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  min-height: 50px;
+}
+.modal-inner button.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+.modal-inner button:active { transform: scale(0.98); }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-inner">
+    <h2>Quiz Summary</h2>
+    <p>Save the image below and submit it as your record.</p>
+    <img id="previewImg" class="preview" alt="Quiz Summary">
+    <div class="row">
+      <button class="ghost" onclick="closeModal()">Close</button>
+      <button onclick="downloadPNG()">Download PNG</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ---------- TOPIC STRUCTURE ----------
+var TOPICS = [
+  {
+    period: 'Preliminary Period',
+    items: [
+      { id: 'scientific_notation', name: 'Scientific Notation' },
+      { id: 'vector_addition',     name: 'Vector Addition' },
+      { id: 'force',               name: 'Force' },
+      { id: 'linear_motion',       name: 'Linear Motion' },
+      { id: 'projectile_motion',   name: 'Projectile Motion' }
+    ]
+  },
+  {
+    period: 'Midterm Period',
+    items: [
+      { id: 'centripetal',       name: 'Centripetal Force / Acceleration' },
+      { id: 'torque',            name: 'Torque' },
+      { id: 'momentum_impulse',  name: 'Linear Momentum / Impulse' },
+      { id: 'work',              name: 'Work' },
+      { id: 'mechanical_energy', name: 'Mechanical Energy' },
+      { id: 'power',             name: 'Power' }
+    ]
+  },
+  {
+    period: 'Prefinal Period',
+    items: [
+      { id: 'pascal',       name: "Pascal's Principle" },
+      { id: 'hydrostatic',  name: 'Hydrostatic Pressure' },
+      { id: 'flow_rate',    name: 'Flow Rate' },
+      { id: 'continuity',   name: 'Continuity Equation' },
+      { id: 'bernoulli',    name: "Bernoulli's Principle" }
+    ]
+  }
+];
+
+// ---------- SAFE STORAGE ----------
+function safeGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+function safeSet(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+
+// ---------- BROWSER CHECK ----------
+function checkBrowser() {
+  var ua = navigator.userAgent;
+  var isApple = /iPad|iPhone|iPod|Macintosh/.test(ua) ||
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (isApple) {
+    return /Safari/.test(ua) && !/Chrome|CriOS|FxiOS|EdgiOS/.test(ua);
+  }
+  return /Chrome/.test(ua) && !/Edg|OPR|SamsungBrowser/.test(ua);
+}
+
+function showBrowserBlock() {
+  var ua = navigator.userAgent;
+  var isApple = /iPad|iPhone|iPod|Macintosh/.test(ua) ||
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var required = isApple ? 'Safari' : 'Google Chrome';
+  document.getElementById('app').innerHTML =
+    '<div class="block-screen">' +
+      '<h1>Browser Not Supported</h1>' +
+      '<p>This page must be opened in <strong>' + required + '</strong>. Please open the link in ' + required + ' to continue.</p>' +
+    '</div>';
+}
+
+// ---------- HELPERS ----------
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function(c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+function fmtDuration(sec) {
+  sec = Math.max(0, Math.round(sec));
+  var m = Math.floor(sec / 60);
+  var s = sec % 60;
+  return m + 'm ' + (s < 10 ? '0' + s : s) + 's';
+}
+
+// ---------- TOPIC STATE ----------
+function getTopicState(id) {
+  var locked = safeGet('phys_locked_' + id) === '1';
+  var score = parseInt(safeGet('phys_score_' + id) || '0', 10);
+  var total = parseInt(safeGet('phys_total_' + id) || '4', 10);
+  var dur = parseInt(safeGet('phys_dur_' + id) || '0', 10);
+  return { locked: locked, score: score, total: total, dur: dur };
+}
+
+// ---------- RENDER INDEX ----------
+function render() {
+  var name = safeGet('phys_name') || '';
+  var html =
+    '<div class="container">' +
+      '<div class="hub-header">' +
+        '<div class="eyebrow">Surigao Education Center · Physics for Engineers</div>' +
+        '<h1>Quiz Hub</h1>' +
+        '<div class="sub">16 timed assessments · One attempt each · 1:45 per item</div>' +
+      '</div>' +
+      '<div class="name-block">' +
+        '<div class="lab">Examinee Name</div>' +
+        '<div class="name-row">' +
+          '<input id="nameInput" type="text" placeholder="Enter your full name" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" value="' + escapeHtml(name) + '">' +
+          '<button class="save-btn" id="saveBtn">Save</button>' +
+        '</div>' +
+        '<div class="saved-hint" id="savedHint">✓ Saved</div>' +
+      '</div>';
+
+  TOPICS.forEach(function(p) {
+    var doneCount = 0;
+    p.items.forEach(function(t) { if (getTopicState(t.id).locked) doneCount++; });
+    html += '<div class="period">' +
+      '<div class="period-head">' +
+        '<span class="label">' + escapeHtml(p.period) + '</span>' +
+        '<span class="meta">' + doneCount + '/' + p.items.length + ' done</span>' +
+        '<span class="line"></span>' +
+      '</div>' +
+      '<div class="topics-grid">';
+    p.items.forEach(function(t) {
+      var st = getTopicState(t.id);
+      var rightHTML, statusHTML, cls;
+      if (st.locked) {
+        rightHTML = st.score + '<span class="total">/' + st.total + '</span>';
+        statusHTML = '<span class="status done">Completed · ' + fmtDuration(st.dur) + '</span>';
+        cls = 'topic-card done';
+      } else {
+        rightHTML = '—';
+        statusHTML = '<span class="status">Not taken</span>';
+        cls = 'topic-card';
+      }
+      html +=
+        '<a class="' + cls + '" href="quiz.html?topic=' + encodeURIComponent(t.id) + '">' +
+          '<div class="left">' +
+            '<div class="name">' + escapeHtml(t.name) + '</div>' +
+            statusHTML +
+          '</div>' +
+          '<div class="right">' + rightHTML + '</div>' +
+        '</a>';
+    });
+    html += '</div></div>';
+  });
+
+  // Summary bar
+  var totalDone = 0, totalScore = 0, totalPossible = 0, totalTime = 0;
+  TOPICS.forEach(function(p) {
+    p.items.forEach(function(t) {
+      var st = getTopicState(t.id);
+      totalPossible += 4;
+      if (st.locked) {
+        totalDone++;
+        totalScore += st.score;
+        totalTime += st.dur;
+      }
+    });
+  });
+  var canDownload = totalDone > 0 && (safeGet('phys_name') || '').trim() !== '';
+  html += '<div class="summary-bar">' +
+    '<div class="info">' +
+      '<div class="k">Overall</div>' +
+      '<div class="v">' + totalScore + '/' + totalPossible + ' · ' + fmtDuration(totalTime) + '</div>' +
+    '</div>' +
+    '<button id="dlBtn"' + (canDownload ? '' : ' disabled') + '>Download Summary</button>' +
+  '</div>' +
+  '</div>'; // /container
+
+  document.getElementById('app').innerHTML = html;
+
+  document.getElementById('saveBtn').addEventListener('click', saveName);
+  document.getElementById('nameInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') saveName();
+  });
+  document.getElementById('dlBtn').addEventListener('click', generateSummary);
+}
+
+function saveName() {
+  var v = document.getElementById('nameInput').value.trim();
+  if (!v) return;
+  safeSet('phys_name', v);
+  var hint = document.getElementById('savedHint');
+  hint.classList.add('show');
+  setTimeout(function() { hint.classList.remove('show'); }, 1500);
+  // re-render to enable download button
+  render();
+}
+
+// ---------- CERTIFICATE PNG ----------
+var lastCanvas = null;
+
+function generateSummary() {
+  var name = (safeGet('phys_name') || '').trim();
+  if (!name) return;
+
+  // Make sure fonts are loaded before drawing
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function() { drawCertificate(name); });
+  } else {
+    drawCertificate(name);
+  }
+}
+
+function drawCertificate(name) {
+  var W = 1200, H = 1700;
+  var canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  var ctx = canvas.getContext('2d');
+
+  // ---- Background ----
+  ctx.fillStyle = '#fdfcf8';
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle paper grain via stippled noise (kept very faint)
+  ctx.save();
+  ctx.globalAlpha = 0.025;
+  for (var i = 0; i < 1800; i++) {
+    ctx.fillStyle = (i % 2) ? '#000' : '#a08000';
+    ctx.fillRect(Math.random() * W, Math.random() * H, 1, 1);
+  }
+  ctx.restore();
+
+  // ---- Outer ornamental frame ----
+  ctx.strokeStyle = '#1a1a1a';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(48, 48, W - 96, H - 96);
+  ctx.lineWidth = 1;
+  ctx.strokeRect(60, 60, W - 120, H - 120);
+
+  // Corner ornaments
+  drawCorner(ctx, 60, 60, 1, 1);
+  drawCorner(ctx, W - 60, 60, -1, 1);
+  drawCorner(ctx, 60, H - 60, 1, -1);
+  drawCorner(ctx, W - 60, H - 60, -1, -1);
+
+  // ---- Header ----
+  var cx = W / 2;
+  ctx.fillStyle = '#a86c1a';
+  ctx.textAlign = 'center';
+  ctx.font = '500 22px "JetBrains Mono", monospace';
+  ctx.fillText('PHYSICS  FOR  ENGINEERS', cx, 145);
+
+  // Decorative line with diamond
+  ctx.strokeStyle = '#a86c1a';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(cx - 220, 175);
+  ctx.lineTo(cx - 14, 175);
+  ctx.moveTo(cx + 14, 175);
+  ctx.lineTo(cx + 220, 175);
+  ctx.stroke();
+  // diamond
+  ctx.beginPath();
+  ctx.moveTo(cx, 168);
+  ctx.lineTo(cx + 7, 175);
+  ctx.lineTo(cx, 182);
+  ctx.lineTo(cx - 7, 175);
+  ctx.closePath();
+  ctx.fillStyle = '#a86c1a';
+  ctx.fill();
+
+  // ---- Title ----
+  ctx.fillStyle = '#1a1a1a';
+  ctx.font = '700 64px Fraunces, serif';
+  ctx.fillText('Quiz Summary', cx, 250);
+
+  // ---- "Awarded to" ----
+  ctx.fillStyle = '#5a5a5a';
+  ctx.font = 'italic 400 22px Fraunces, serif';
+  ctx.fillText('This document certifies the performance of', cx, 310);
+
+  // ---- Name ----
+  ctx.fillStyle = '#1a1a1a';
+  ctx.font = '600 56px Fraunces, serif';
+  // Truncate name if absurdly long
+  var displayName = name.length > 40 ? name.slice(0, 39) + '…' : name;
+  ctx.fillText(displayName, cx, 380);
+
+  // Underline beneath name
+  var nameWidth = ctx.measureText(displayName).width;
+  ctx.strokeStyle = '#1a1a1a';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(cx - nameWidth / 2 - 20, 405);
+  ctx.lineTo(cx + nameWidth / 2 + 20, 405);
+  ctx.stroke();
+
+  // ---- Body sections ----
+  var y = 470;
+  var leftX = 130;
+  var rightX = W - 130;
+
+  TOPICS.forEach(function(p) {
+    // period header
+    ctx.fillStyle = '#a86c1a';
+    ctx.textAlign = 'left';
+    ctx.font = '500 14px "JetBrains Mono", monospace';
+    ctx.fillText(p.period.toUpperCase(), leftX, y);
+    // line
+    ctx.strokeStyle = '#d4c4a0';
+    ctx.lineWidth = 1;
+    var pTextW = ctx.measureText(p.period.toUpperCase()).width;
+    ctx.beginPath();
+    ctx.moveTo(leftX + pTextW + 18, y - 5);
+    ctx.lineTo(rightX, y - 5);
+    ctx.stroke();
+    y += 30;
+
+    p.items.forEach(function(t) {
+      var st = getTopicState(t.id);
+      ctx.fillStyle = '#1a1a1a';
+      ctx.textAlign = 'left';
+      ctx.font = '400 22px Fraunces, serif';
+      ctx.fillText(t.name, leftX, y);
+
+      // dotted leader
+      var nameW = ctx.measureText(t.name).width;
+      var rightTxt = st.locked ? (st.score + ' / ' + st.total) : '— / 4';
+      var rightDur = st.locked ? fmtDuration(st.dur) : '—';
+      ctx.font = '500 18px "JetBrains Mono", monospace';
+      var scoreW = ctx.measureText(rightTxt).width;
+      ctx.font = '400 14px "JetBrains Mono", monospace';
+      var durW = ctx.measureText(rightDur).width;
+
+      var dotsStart = leftX + nameW + 12;
+      var dotsEnd = rightX - scoreW - durW - 24;
+      ctx.fillStyle = '#b0a890';
+      ctx.font = '400 16px Fraunces, serif';
+      var dotsStr = '';
+      var dotW = ctx.measureText('· ').width;
+      var dotsAvail = dotsEnd - dotsStart;
+      var dotsCount = Math.max(0, Math.floor(dotsAvail / dotW));
+      for (var i = 0; i < dotsCount; i++) dotsStr += '· ';
+      ctx.fillText(dotsStr, dotsStart, y);
+
+      // duration
+      ctx.fillStyle = '#7a7060';
+      ctx.font = '400 14px "JetBrains Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(rightDur, rightX - scoreW - 18, y);
+
+      // score
+      ctx.fillStyle = st.locked ? '#1a1a1a' : '#b0a890';
+      ctx.font = '500 18px "JetBrains Mono", monospace';
+      ctx.fillText(rightTxt, rightX, y);
+
+      y += 32;
+    });
+    y += 10;
+  });
+
+  // ---- Total ----
+  y += 10;
+  ctx.strokeStyle = '#1a1a1a';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(leftX, y);
+  ctx.lineTo(rightX, y);
+  ctx.stroke();
+  y += 38;
+
+  var totalScore = 0, totalPossible = 0, totalTime = 0;
+  TOPICS.forEach(function(p) {
+    p.items.forEach(function(t) {
+      var st = getTopicState(t.id);
+      totalPossible += st.total || 4;
+      if (st.locked) { totalScore += st.score; totalTime += st.dur; }
+    });
+  });
+
+  ctx.fillStyle = '#1a1a1a';
+  ctx.textAlign = 'left';
+  ctx.font = '600 22px Fraunces, serif';
+  ctx.fillText('Overall Score', leftX, y);
+  ctx.textAlign = 'right';
+  ctx.font = '700 26px "JetBrains Mono", monospace';
+  ctx.fillText(totalScore + ' / ' + totalPossible, rightX, y);
+  y += 38;
+
+  ctx.fillStyle = '#5a5a5a';
+  ctx.textAlign = 'left';
+  ctx.font = '400 18px Fraunces, serif';
+  ctx.fillText('Total Active Quiz Time', leftX, y);
+  ctx.textAlign = 'right';
+  ctx.font = '500 18px "JetBrains Mono", monospace';
+  ctx.fillText(fmtDuration(totalTime), rightX, y);
+
+  // ---- Footer ----
+  var dateStr = formatDate(new Date());
+  ctx.fillStyle = '#7a7060';
+  ctx.textAlign = 'center';
+  ctx.font = 'italic 400 16px Fraunces, serif';
+  ctx.fillText('Issued ' + dateStr, cx, H - 130);
+  ctx.font = '400 12px "JetBrains Mono", monospace';
+  ctx.fillStyle = '#a86c1a';
+  ctx.fillText('SURIGAO  EDUCATION  CENTER', cx, H - 100);
+
+  lastCanvas = canvas;
+  showModal(canvas);
+}
+
+function drawCorner(ctx, x, y, dx, dy) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(dx, dy);
+  ctx.strokeStyle = '#a86c1a';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(8, 24); ctx.lineTo(24, 24); ctx.lineTo(24, 8);
+  ctx.moveTo(8, 14); ctx.lineTo(14, 14); ctx.lineTo(14, 8);
+  ctx.stroke();
+  ctx.fillStyle = '#a86c1a';
+  ctx.beginPath();
+  ctx.arc(20, 20, 1.5, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function formatDate(d) {
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+
+function showModal(canvas) {
+  var img = document.getElementById('previewImg');
+  img.src = canvas.toDataURL('image/png');
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+
+function downloadPNG() {
+  if (!lastCanvas) return;
+  var name = (safeGet('phys_name') || 'student').trim().replace(/\s+/g, '_');
+  var dataURL = lastCanvas.toDataURL('image/png');
+  var a = document.createElement('a');
+  a.href = dataURL;
+  a.download = name + '_physics_summary.png';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// ---------- BOOT ----------
+if (!checkBrowser()) {
+  showBrowserBlock();
+} else {
+  render();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Physics Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --bg-2: #131826;
+  --grid: rgba(255, 140, 66, 0.06);
+  --line: rgba(255, 255, 255, 0.08);
+  --text: #e8eaf0;
+  --dim: #8a92a8;
+  --accent: #ff8c42;
+  --good: #4ade80;
+  --warn: #fbbf24;
+  --bad: #ef4444;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  padding: clamp(16px, 4vw, 32px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.container {
+  width: 100%;
+  max-width: 720px;
+}
+
+/* ========== BROWSER BLOCK ========== */
+.block-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+}
+.block-screen h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(28px, 7vw, 48px);
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.block-screen p {
+  font-size: clamp(14px, 4vw, 18px);
+  color: var(--dim);
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+/* ========== START SCREEN ========== */
+.start-card {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: clamp(24px, 5vw, 40px);
+  margin-top: clamp(20px, 8vw, 60px);
+}
+.start-card .label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.start-card h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(28px, 7vw, 44px);
+  line-height: 1.15;
+  margin-bottom: 24px;
+}
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.meta-row .item .k {
+  font-size: 11px;
+  color: var(--dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.meta-row .item .v {
+  font-size: 16px;
+  color: var(--text);
+}
+.rules {
+  background: rgba(255, 140, 66, 0.05);
+  border-left: 3px solid var(--accent);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--dim);
+}
+.rules strong { color: var(--text); display: block; margin-bottom: 6px; font-weight: 500; }
+.btn {
+  display: block;
+  width: 100%;
+  background: var(--accent);
+  color: #0a0e1a;
+  border: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+  padding: 16px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  min-height: 56px;
+  transition: transform 0.1s ease, opacity 0.2s ease;
+}
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+/* ========== QUIZ SCREEN ========== */
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 12px;
+  color: var(--dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.timer {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: clamp(22px, 6vw, 28px);
+  color: var(--good);
+  letter-spacing: 0.05em;
+  transition: color 0.3s ease;
+}
+.timer.warn { color: var(--warn); }
+.timer.bad { color: var(--bad); animation: pulse 1s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.55; } }
+
+.timer-bar {
+  height: 4px;
+  background: var(--bg-2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+.timer-bar .fill {
+  height: 100%;
+  background: var(--good);
+  width: 100%;
+  transition: width 1s linear, background-color 0.3s ease;
+}
+.timer-bar .fill.warn { background: var(--warn); }
+.timer-bar .fill.bad { background: var(--bad); }
+
+.q-card {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: clamp(20px, 5vw, 32px);
+  margin-bottom: 20px;
+}
+.q-num {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.q-text {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(18px, 5vw, 22px);
+  line-height: 1.5;
+  margin-bottom: 24px;
+  color: var(--text);
+}
+.q-text .v {
+  background: rgba(255, 140, 66, 0.12);
+  color: var(--accent);
+  padding: 1px 6px;
+  border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.95em;
+}
+.input-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.input-row input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  padding: 14px 16px;
+  min-height: 52px;
+  outline: none;
+  -webkit-appearance: none;
+}
+.input-row .unit {
+  background: var(--bg-2);
+  color: var(--dim);
+  padding: 14px 18px;
+  font-size: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  display: flex;
+  align-items: center;
+  border-left: 1px solid var(--line);
+}
+.input-row input:focus { background: rgba(255, 140, 66, 0.04); }
+
+.feedback {
+  font-size: 13px;
+  margin-top: 12px;
+  min-height: 16px;
+  letter-spacing: 0.05em;
+}
+.feedback.bad { color: var(--bad); }
+
+/* ========== RESULT ========== */
+.result-card {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: clamp(28px, 6vw, 48px);
+  margin-top: clamp(20px, 8vw, 60px);
+  text-align: center;
+}
+.result-card .label {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.result-card .score {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(48px, 14vw, 84px);
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.result-card .score .total { color: var(--dim); }
+.result-card .duration {
+  color: var(--dim);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  margin-bottom: 28px;
+}
+.result-card .reason {
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 3px solid var(--bad);
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<div id="app" class="container"></div>
+
+<script>
+'use strict';
+
+// ---------- SAFE STORAGE ----------
+function safeGet(k) {
+  try { return localStorage.getItem(k); } catch (e) { return null; }
+}
+function safeSet(k, v) {
+  try { localStorage.setItem(k, v); return true; } catch (e) { return false; }
+}
+
+// ---------- BROWSER CHECK ----------
+function checkBrowser() {
+  var ua = navigator.userAgent;
+  var isApple = /iPad|iPhone|iPod|Macintosh/.test(ua) ||
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (isApple) {
+    return /Safari/.test(ua) && !/Chrome|CriOS|FxiOS|EdgiOS/.test(ua);
+  }
+  return /Chrome/.test(ua) && !/Edg|OPR|SamsungBrowser/.test(ua);
+}
+
+function showBrowserBlock() {
+  var ua = navigator.userAgent;
+  var isApple = /iPad|iPhone|iPod|Macintosh/.test(ua) ||
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var required = isApple ? 'Safari' : 'Google Chrome';
+  document.getElementById('app').innerHTML =
+    '<div class="block-screen">' +
+      '<h1>Browser Not Supported</h1>' +
+      '<p>This exam must be taken in <strong>' + required + '</strong>. Please open the link in ' + required + ' to continue.</p>' +
+    '</div>';
+}
+
+// ---------- FORMULA EVAL ----------
+function evalFormula(formula, vars) {
+  var sind = function(d) { return Math.sin(d * Math.PI / 180); };
+  var cosd = function(d) { return Math.cos(d * Math.PI / 180); };
+  var tand = function(d) { return Math.tan(d * Math.PI / 180); };
+  var names = Object.keys(vars);
+  var values = names.map(function(n) { return vars[n]; });
+  var fn = Function.apply(null,
+    names.concat(['sind', 'cosd', 'tand', 'return ' + formula + ';'])
+  );
+  return fn.apply(null, values.concat([sind, cosd, tand]));
+}
+
+// ---------- RANDOMIZE VARIABLES ----------
+function pickVars(varsDef) {
+  var picked = {};
+  Object.keys(varsDef).forEach(function(k) {
+    var arr = varsDef[k];
+    picked[k] = arr[Math.floor(Math.random() * arr.length)];
+  });
+  return picked;
+}
+
+// ---------- TEMPLATE RENDER ----------
+function renderTemplate(tpl, vars) {
+  return tpl.replace(/\{(\w+)\}/g, function(_, k) {
+    var v = vars[k];
+    var disp = (typeof v === 'number') ? v.toString() : v;
+    return '<span class="v">' + disp + '</span>';
+  });
+}
+
+// ---------- ANSWER CHECK ----------
+function checkAnswer(userInput, correctVal, type) {
+  if (userInput === '' || userInput === null || userInput === undefined) return false;
+  if (type === 'integer') {
+    var u = parseInt(userInput, 10);
+    if (isNaN(u)) return false;
+    return u === Math.round(correctVal);
+  }
+  var u2 = parseFloat(userInput);
+  if (isNaN(u2)) return false;
+  if (correctVal === 0) return Math.abs(u2) < 0.01;
+  return Math.abs(u2 - correctVal) / Math.abs(correctVal) <= 0.02;
+}
+
+// ---------- FORMAT DURATION ----------
+function fmtDuration(sec) {
+  sec = Math.max(0, Math.round(sec));
+  var m = Math.floor(sec / 60);
+  var s = sec % 60;
+  return m + 'm ' + (s < 10 ? '0' + s : s) + 's';
+}
+
+// ---------- STATE ----------
+var QUIZ_DURATION_PER_Q = 105;
+var FAST_THRESHOLD = 5;
+var topicId = null;
+var quizData = null;
+var currentQ = 0;
+var score = 0;
+var answers = [];
+var quizStartTime = 0;
+var qStartTime = 0;
+var timerInterval = null;
+var visibilityStrikes = 0;
+var fastStrikes = 0;
+var quizActive = false;
+var currentVars = null;
+var currentCorrect = null;
+
+// ---------- LOAD ----------
+function init() {
+  if (!checkBrowser()) { showBrowserBlock(); return; }
+  var params = new URLSearchParams(window.location.search);
+  topicId = params.get('topic');
+  if (!topicId) {
+    document.getElementById('app').innerHTML =
+      '<div class="block-screen"><h1>No topic specified</h1><p>Return to the index page.</p></div>';
+    return;
+  }
+  // Load fast-strikes record (persisted across sessions)
+  var fs = safeGet('phys_fs_' + topicId);
+  fastStrikes = fs ? parseInt(fs, 10) : 0;
+  // Check if already taken (locked)
+  var locked = safeGet('phys_locked_' + topicId);
+  if (locked === '1') {
+    showAlreadyTaken();
+    return;
+  }
+  fetch('topics/' + topicId + '.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      quizData = data;
+      showStart();
+    })
+    .catch(function() {
+      document.getElementById('app').innerHTML =
+        '<div class="block-screen"><h1>Could not load topic</h1><p>Check your connection.</p></div>';
+    });
+}
+
+// ---------- ALREADY TAKEN ----------
+function showAlreadyTaken() {
+  var sc = safeGet('phys_score_' + topicId) || '0';
+  var tot = safeGet('phys_total_' + topicId) || '4';
+  var dur = parseInt(safeGet('phys_dur_' + topicId) || '0', 10);
+  document.getElementById('app').innerHTML =
+    '<div class="result-card">' +
+      '<div class="label">Already Completed</div>' +
+      '<div class="score">' + sc + '<span class="total">/' + tot + '</span></div>' +
+      '<div class="duration">' + fmtDuration(dur) + '</div>' +
+      '<button class="btn" onclick="window.location.href=\'index.html\'">Back to Index</button>' +
+    '</div>';
+}
+
+// ---------- START SCREEN ----------
+function showStart() {
+  var name = safeGet('phys_name') || 'Student';
+  var total = quizData.questions.length;
+  document.getElementById('app').innerHTML =
+    '<div class="start-card">' +
+      '<div class="label">Physics for Engineers</div>' +
+      '<h1>' + quizData.title + '</h1>' +
+      '<div class="meta-row">' +
+        '<div class="item"><div class="k">Examinee</div><div class="v">' + escapeHtml(name) + '</div></div>' +
+        '<div class="item"><div class="k">Items</div><div class="v">' + total + '</div></div>' +
+        '<div class="item"><div class="k">Time / Item</div><div class="v">1:45</div></div>' +
+      '</div>' +
+      '<div class="rules">' +
+        '<strong>Rules</strong>' +
+        '· One attempt only.<br>' +
+        '· 105 seconds per question.<br>' +
+        '· Numeric answers; 2% margin allowed.<br>' +
+        '· Switching tabs/apps 3 times will end the exam.<br>' +
+        '· Solve carefully — rushing is monitored.' +
+      '</div>' +
+      '<button class="btn" id="startBtn">Begin</button>' +
+    '</div>';
+  document.getElementById('startBtn').addEventListener('click', startQuiz);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function(c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+// ---------- START QUIZ ----------
+function startQuiz() {
+  currentQ = 0;
+  score = 0;
+  answers = [];
+  visibilityStrikes = 0;
+  quizStartTime = Date.now();
+  quizActive = true;
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  showQuestion();
+}
+
+// ---------- VISIBILITY (anti-cheat) ----------
+function onVisibilityChange() {
+  if (!quizActive) return;
+  if (document.hidden) {
+    visibilityStrikes++;
+    if (visibilityStrikes >= 3) {
+      lockExam('Exam ended: switched tabs/apps 3 times.');
+    }
+  }
+}
+
+// ---------- SHOW QUESTION ----------
+function showQuestion() {
+  if (currentQ >= quizData.questions.length) {
+    finishQuiz('complete');
+    return;
+  }
+  var q = quizData.questions[currentQ];
+  currentVars = pickVars(q.variables);
+  try {
+    currentCorrect = evalFormula(q.formula, currentVars);
+  } catch (err) {
+    currentCorrect = NaN;
+  }
+  var unitHtml = q.unit ? '<div class="unit">' + q.unit + '</div>' : '';
+  var html =
+    '<div class="quiz-header">' +
+      '<div>Q' + (currentQ + 1) + ' / ' + quizData.questions.length + ' · ' + escapeHtml(quizData.title) + '</div>' +
+      '<div class="timer" id="timer">1:45</div>' +
+    '</div>' +
+    '<div class="timer-bar"><div class="fill" id="timerFill"></div></div>' +
+    '<div class="q-card">' +
+      '<div class="q-num">Question ' + (currentQ + 1) + '</div>' +
+      '<div class="q-text">' + renderTemplate(q.template, currentVars) + '</div>' +
+      '<div class="input-row">' +
+        '<input type="text" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="answer" placeholder="Your answer">' +
+        unitHtml +
+      '</div>' +
+      '<div class="feedback" id="feedback"></div>' +
+    '</div>' +
+    '<button class="btn" id="submitBtn">Submit</button>';
+  document.getElementById('app').innerHTML = html;
+  document.getElementById('answer').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') submitAnswer();
+  });
+  document.getElementById('submitBtn').addEventListener('click', submitAnswer);
+  setTimeout(function() {
+    var inp = document.getElementById('answer');
+    if (inp) inp.focus();
+  }, 100);
+  qStartTime = Date.now();
+  startTimer();
+}
+
+// ---------- TIMER ----------
+function startTimer() {
+  var remaining = QUIZ_DURATION_PER_Q;
+  updateTimerUI(remaining);
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(function() {
+    remaining--;
+    if (remaining <= 0) {
+      updateTimerUI(0);
+      clearInterval(timerInterval);
+      submitAnswer(true);
+      return;
+    }
+    updateTimerUI(remaining);
+  }, 1000);
+}
+
+function updTimerCls(remaining) {
+  if (remaining > 70) return '';
+  if (remaining > 40) return 'warn';
+  return 'bad';
+}
+
+function updateTimerUI(remaining) {
+  var t = document.getElementById('timer');
+  var f = document.getElementById('timerFill');
+  if (!t || !f) return;
+  var m = Math.floor(remaining / 60);
+  var s = remaining % 60;
+  t.textContent = m + ':' + (s < 10 ? '0' + s : s);
+  var cls = updTimerCls(remaining);
+  t.className = 'timer ' + cls;
+  f.className = 'fill ' + cls;
+  f.style.width = (remaining / QUIZ_DURATION_PER_Q * 100) + '%';
+}
+
+// ---------- SUBMIT ANSWER ----------
+function submitAnswer(timeUp) {
+  if (!quizActive) return;
+  if (timerInterval) clearInterval(timerInterval);
+  var elapsed = (Date.now() - qStartTime) / 1000;
+  var inp = document.getElementById('answer');
+  var val = inp ? inp.value.trim() : '';
+  // Fast-answer flag: any question answered in ≤ 5s (only if user actually submitted, not on time-up)
+  if (!timeUp && elapsed <= FAST_THRESHOLD && val !== '') {
+    fastStrikes++;
+    safeSet('phys_fs_' + topicId, String(fastStrikes));
+    if (fastStrikes >= 3) {
+      // Lock at zero
+      safeSet('phys_score_' + topicId, '0');
+      safeSet('phys_total_' + topicId, String(quizData.questions.length));
+      safeSet('phys_dur_' + topicId, '0');
+      safeSet('phys_locked_' + topicId, '1');
+      quizActive = false;
+      document.removeEventListener('visibilitychange', onVisibilityChange);
+      window.location.href = 'index.html';
+      return;
+    }
+    // Silent reset: back to start screen, re-randomize
+    quizActive = false;
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+    showStart();
+    return;
+  }
+  var q = quizData.questions[currentQ];
+  var correct = checkAnswer(val, currentCorrect, q.answerType);
+  if (correct) score++;
+  answers.push({ correct: correct, elapsed: elapsed });
+  currentQ++;
+  showQuestion();
+}
+
+// ---------- LOCK / FINISH ----------
+function lockExam(reason) {
+  quizActive = false;
+  if (timerInterval) clearInterval(timerInterval);
+  document.removeEventListener('visibilitychange', onVisibilityChange);
+  finishQuiz('locked', reason);
+}
+
+function finishQuiz(mode, reason) {
+  quizActive = false;
+  if (timerInterval) clearInterval(timerInterval);
+  document.removeEventListener('visibilitychange', onVisibilityChange);
+  var totalDur = Math.round((Date.now() - quizStartTime) / 1000);
+  var total = quizData.questions.length;
+  safeSet('phys_score_' + topicId, String(score));
+  safeSet('phys_total_' + topicId, String(total));
+  safeSet('phys_dur_' + topicId, String(totalDur));
+  safeSet('phys_locked_' + topicId, '1');
+  var reasonHtml = reason ? '<div class="reason">' + escapeHtml(reason) + '</div>' : '';
+  document.getElementById('app').innerHTML =
+    '<div class="result-card">' +
+      '<div class="label">Result · ' + escapeHtml(quizData.title) + '</div>' +
+      '<div class="score">' + score + '<span class="total">/' + total + '</span></div>' +
+      '<div class="duration">Time: ' + fmtDuration(totalDur) + '</div>' +
+      reasonHtml +
+      '<button class="btn" onclick="window.location.href=\'index.html\'">Back to Index</button>' +
+    '</div>';
+}
+
+// ---------- BOOT ----------
+init();
+</script>
+</body>
+</html>
