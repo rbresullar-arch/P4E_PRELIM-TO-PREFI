@@ -428,7 +428,7 @@ function init() {
     showAlreadyTaken();
     return;
   }
-  fetch('topics/' + topicId + '.json')
+  fetch(topicId + '.json')
     .then(function(r) { return r.json(); })
     .then(function(data) {
       quizData = data;
