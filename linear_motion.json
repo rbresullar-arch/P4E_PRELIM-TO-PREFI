@@ -2,42 +2,64 @@
   "title": "Linear Motion",
   "questions": [
     {
-      "template": "A car accelerates from rest at {a} m/s² for {t} seconds. What is its final velocity?",
+      "template": "An object starts from rest and accelerates at {a} m/s² for {t} seconds. What is its final velocity?",
       "variables": {
-        "a": [2, 3, 5],
-        "t": [4, 6, 10]
+        "a": [1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0],
+        "t": [2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
       },
       "formula": "a * t",
       "answerType": "decimal",
       "unit": "m/s"
     },
     {
-      "template": "An object starts at {v0} m/s and decelerates at {a} m/s². How far does it travel before stopping?",
+      "template": "An object moves with initial velocity {v0} m/s and accelerates at {a} m/s² for {t} seconds. What is the distance traveled?",
       "variables": {
-        "v0": [10, 20, 30],
-        "a": [2, 5, 4]
+        "v0": [0, 2, 4, 5, 6, 8, 10, 12, 15, 20],
+        "a": [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0],
+        "t": [2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
       },
-      "formula": "(v0 * v0) / (2 * a)",
+      "formula": "v0 * t + 0.5 * a * t * t",
       "answerType": "decimal",
       "unit": "m"
     },
     {
-      "template": "A ball is dropped from rest. After {t} seconds, what is its velocity? (Use g = 9.8 m/s²)",
+      "template": "An object with initial velocity {v0} m/s decelerates at {a} m/s². How long does it take to stop?",
       "variables": {
-        "t": [2, 3, 5]
+        "v0": [5, 8, 10, 12, 15, 18, 20, 24, 25, 30],
+        "a": [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0]
       },
-      "formula": "9.8 * t",
+      "formula": "v0 / a",
+      "answerType": "decimal",
+      "unit": "s"
+    },
+    {
+      "template": "An object accelerates from {v0} m/s to {v} m/s over {t} seconds. What is its acceleration?",
+      "variables": {
+        "v0": [0, 2, 4, 5, 6, 8, 10, 12, 15, 20],
+        "v": [10, 15, 20, 25, 30, 35, 40, 45, 50, 60],
+        "t": [2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
+      },
+      "formula": "(v - v0) / t",
+      "answerType": "decimal",
+      "unit": "m/s²"
+    },
+    {
+      "template": "An object starts from rest and travels {d} m with a constant acceleration of {a} m/s². What is its final velocity?",
+      "variables": {
+        "d": [10, 20, 30, 40, 50, 60, 80, 100, 120, 150],
+        "a": [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0]
+      },
+      "formula": "Math.sqrt(2 * a * d)",
       "answerType": "decimal",
       "unit": "m/s"
     },
     {
-      "template": "A car traveling at {v0} m/s accelerates at {a} m/s² for {t} seconds. What is the distance traveled?",
+      "template": "An object moving at {v0} m/s decelerates at {a} m/s² until it stops. What is the stopping distance?",
       "variables": {
-        "v0": [10, 15, 20],
-        "a": [2, 3, 4],
-        "t": [5, 4, 6]
+        "v0": [5, 8, 10, 12, 15, 18, 20, 24, 25, 30],
+        "a": [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 6.0]
       },
-      "formula": "v0 * t + 0.5 * a * t * t",
+      "formula": "(v0 * v0) / (2 * a)",
       "answerType": "decimal",
       "unit": "m"
     }
