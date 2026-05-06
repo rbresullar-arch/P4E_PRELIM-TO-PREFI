@@ -2,45 +2,50 @@
   "title": "Bernoulli's Principle",
   "questions": [
     {
-      "template": "Water flows horizontally through a pipe at {v1} m/s with pressure {p1} Pa. At a section where the speed is {v2} m/s, what is the pressure? (ρ = 1000 kg/m³)",
+      "template": "A fluid flows through a pipe with pressure {P1} Pa and velocity {v1} m/s at point 1. At point 2, the velocity increases to {v2} m/s. Both points are at the same height. What is the pressure at point 2? (Density of fluid = {rho} kg/m³)",
       "variables": {
-        "v1": [2, 4, 5],
-        "p1": [200000, 150000, 100000],
-        "v2": [6, 8, 10]
+        "P1": [200000, 250000, 300000, 350000, 400000, 450000, 500000, 550000, 600000, 650000],
+        "v1": [2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
+        "v2": [8, 10, 12, 14, 16, 18, 20, 22, 24, 25],
+        "rho": [800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250]
       },
-      "formula": "p1 + 0.5 * 1000 * (v1 * v1 - v2 * v2)",
+      "formula": "P1 + 0.5 * rho * (v1 * v1 - v2 * v2)",
       "answerType": "decimal",
       "unit": "Pa"
     },
     {
-      "template": "A tank has a small hole at depth {h} m below the water surface. What is the speed of water exiting the hole? (Torricelli's theorem, g = 9.8 m/s²)",
+      "template": "Water (density = 1000 kg/m³) flows horizontally at {v1} m/s through a pipe at pressure {P1} Pa. The pipe narrows and the velocity increases to {v2} m/s. What is the pressure drop between the two points?",
       "variables": {
-        "h": [5, 10, 20]
+        "P1": [150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000, 550000, 600000],
+        "v1": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        "v2": [5, 8, 10, 12, 14, 16, 18, 20, 22, 25]
       },
-      "formula": "Math.sqrt(2 * 9.8 * h)",
+      "formula": "0.5 * 1000 * (v2 * v2 - v1 * v1)",
+      "answerType": "decimal",
+      "unit": "Pa"
+    },
+    {
+      "template": "A fluid with density {rho} kg/m³ flows through a horizontal pipe. At point 1, pressure is {P1} Pa and velocity is {v1} m/s. At point 2, the pressure drops to {P2} Pa. What is the velocity at point 2?",
+      "variables": {
+        "P1": [300000, 350000, 400000, 450000, 500000, 550000, 600000, 650000, 700000, 750000],
+        "P2": [100000, 150000, 200000, 250000, 280000, 300000, 320000, 350000, 380000, 400000],
+        "v1": [2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
+        "rho": [800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250]
+      },
+      "formula": "Math.sqrt(v1 * v1 + 2 * (P1 - P2) / rho)",
       "answerType": "decimal",
       "unit": "m/s"
     },
     {
-      "template": "Water enters a horizontal pipe at {v1} m/s with pressure {p1} Pa, and exits at {v2} m/s. What is the exit pressure? (ρ = 1000 kg/m³)",
+      "template": "Water (density = 1000 kg/m³) flows through a pipe. At point 1 (height {h1} m), pressure is {P1} Pa and velocity is {v1} m/s. At point 2 (height {h2} m), velocity is {v2} m/s. What is the pressure at point 2? (g = 9.8 m/s²)",
       "variables": {
-        "v1": [3, 2, 5],
-        "v2": [6, 8, 10],
-        "p1": [180000, 200000, 250000]
+        "P1": [200000, 250000, 300000, 350000, 400000, 450000, 500000, 550000, 600000, 650000],
+        "v1": [2, 3, 4, 5, 6, 7, 8, 9, 10, 12],
+        "v2": [6, 8, 10, 12, 14, 16, 18, 20, 22, 24],
+        "h1": [0, 1, 2, 3, 4, 5, 6, 7, 8, 10],
+        "h2": [2, 3, 4, 5, 6, 7, 8, 9, 10, 12]
       },
-      "formula": "p1 + 0.5 * 1000 * (v1 * v1 - v2 * v2)",
-      "answerType": "decimal",
-      "unit": "Pa"
-    },
-    {
-      "template": "A pipe rises a height of {h} m. Water enters at {v1} m/s and pressure {p1} Pa, and the speed at the top is {v2} m/s. What is the pressure at the top? (ρ = 1000 kg/m³, g = 9.8 m/s²)",
-      "variables": {
-        "h": [2, 5, 10],
-        "v1": [4, 3, 2],
-        "v2": [2, 1, 1],
-        "p1": [300000, 250000, 200000]
-      },
-      "formula": "p1 + 0.5 * 1000 * (v1 * v1 - v2 * v2) - 1000 * 9.8 * h",
+      "formula": "P1 + 0.5 * 1000 * (v1 * v1 - v2 * v2) + 1000 * 9.8 * (h1 - h2)",
       "answerType": "decimal",
       "unit": "Pa"
     }
